@@ -6,18 +6,22 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;display=swap" crossorigin>
 <link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight,wide.css">
 <link rel="preload" as="style" href="./_observablehq/stdlib/inputs.css">
+<link rel="preload" as="style" href="./_npm/katex@0.16.9/dist/katex.min.css">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;display=swap" crossorigin>
 <link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight,wide.css">
 <link rel="stylesheet" type="text/css" href="./_observablehq/stdlib/inputs.css">
+<link rel="stylesheet" type="text/css" href="./_npm/katex@0.16.9/dist/katex.min.css">
 <link rel="modulepreload" href="./_observablehq/client.js">
 <link rel="modulepreload" href="./_observablehq/runtime.js">
 <link rel="modulepreload" href="./_observablehq/stdlib.js">
 <link rel="modulepreload" href="./_npm/d3@7.9.0/+esm.js">
 <link rel="modulepreload" href="./_npm/d3-dsv@3.0.1/+esm.js">
+<link rel="modulepreload" href="./_npm/htl@0.3.1/+esm.js">
 <link rel="modulepreload" href="./_observablehq/stdlib/inputs.js">
 <link rel="modulepreload" href="./_npm/@observablehq/plot@0.6.14/+esm.js">
-<link rel="modulepreload" href="./_npm/htl@0.3.1/+esm.js">
+<link rel="modulepreload" href="./_observablehq/stdlib/tex.js">
 <link rel="modulepreload" href="./_npm/isoformat@0.2.1/+esm.js">
+<link rel="modulepreload" href="./_npm/katex@0.16.9/+esm.js">
 <link rel="modulepreload" href="./_npm/d3-array@3.2.4/+esm.js">
 <link rel="modulepreload" href="./_npm/d3-axis@3.0.0/+esm.js">
 <link rel="modulepreload" href="./_npm/d3-brush@3.0.0/+esm.js">
@@ -57,12 +61,13 @@
 import {define} from "./_observablehq/client.js";
 import {registerFile} from "./_observablehq/stdlib.js";
 
-registerFile("./data/FreemanZiemba2013.csv", {"name":"./data/FreemanZiemba2013.csv","mimeType":"text/csv","path":"./_file/data/FreemanZiemba2013.faab59d3.csv"});
-registerFile("./data/Hatsopoulos2007.csv", {"name":"./data/Hatsopoulos2007.csv","mimeType":"text/csv","path":"./_file/data/Hatsopoulos2007.c3f9bed2.csv"});
-registerFile("./data/MajajHong2015.csv", {"name":"./data/MajajHong2015.csv","mimeType":"text/csv","path":"./_file/data/MajajHong2015.685cdd73.csv"});
-registerFile("./data/Mante2013.csv", {"name":"./data/Mante2013.csv","mimeType":"text/csv","path":"./_file/data/Mante2013.a3bcd524.csv"});
-registerFile("./data/cards/measures.csv", {"name":"./data/cards/measures.csv","mimeType":"text/csv","path":"./_file/data/cards/measures.49d3739d.csv"});
-registerFile("./data/ultrametric.csv", {"name":"./data/ultrametric.csv","mimeType":"text/csv","path":"./_file/data/ultrametric.5a4cd947.csv"});
+registerFile("./data/benchmarks/ultrametric/scores_at_threshold.csv", {"name":"./data/benchmarks/ultrametric/scores_at_threshold.csv","mimeType":"text/csv","path":"./_file/data/benchmarks/ultrametric/scores_at_threshold.54b646df.csv"});
+registerFile("./data/cards/measures.csv", {"name":"./data/cards/measures.csv","mimeType":"text/csv","path":"./_file/data/cards/measures.c6800542.csv"});
+registerFile("./data/decoding_acc_vs_scores/FreemanZiemba2013.csv", {"name":"./data/decoding_acc_vs_scores/FreemanZiemba2013.csv","mimeType":"text/csv","path":"./_file/data/decoding_acc_vs_scores/FreemanZiemba2013.faab59d3.csv"});
+registerFile("./data/decoding_acc_vs_scores/Hatsopoulos2007.csv", {"name":"./data/decoding_acc_vs_scores/Hatsopoulos2007.csv","mimeType":"text/csv","path":"./_file/data/decoding_acc_vs_scores/Hatsopoulos2007.c3f9bed2.csv"});
+registerFile("./data/decoding_acc_vs_scores/MajajHong2015.csv", {"name":"./data/decoding_acc_vs_scores/MajajHong2015.csv","mimeType":"text/csv","path":"./_file/data/decoding_acc_vs_scores/MajajHong2015.685cdd73.csv"});
+registerFile("./data/decoding_acc_vs_scores/Mante2013.csv", {"name":"./data/decoding_acc_vs_scores/Mante2013.csv","mimeType":"text/csv","path":"./_file/data/decoding_acc_vs_scores/Mante2013.a3bcd524.csv"});
+registerFile("./data/decoding_acc_vs_scores/ultrametric.csv", {"name":"./data/decoding_acc_vs_scores/ultrametric.csv","mimeType":"text/csv","path":"./_file/data/decoding_acc_vs_scores/ultrametric.5a4cd947.csv"});
 
 define({id: "40f21020", outputs: ["d3"], body: async () => {
 const d3 = await import("./_npm/d3@7.9.0/+esm.js");
@@ -70,30 +75,102 @@ const d3 = await import("./_npm/d3@7.9.0/+esm.js");
 return {d3};
 }});
 
-define({id: "774ff5f6", inputs: ["FileAttachment"], outputs: ["datasets","datasetIds"], body: (FileAttachment) => {
-// TODO: not working
-// const datasetScores = {
-//   "ultrametric": FileAttachment("data/ultrametric.csv").csv({typed: true}),
-//   "siegel15-V4-var99": FileAttachment("data/siegel15-V4-var99.csv").csv({typed: true}),
-//   "MajajHong2015": FileAttachment("data/majajhong2015.csv").csv({typed: true}),
-// };
-// const datasetIds = Object.keys(datasetScores);
+define({id: "9919e91a", inline: true, inputs: ["tex","display"], body: async (tex,display) => {
+display(await(
+tex`Y`
+))
+}});
 
-// const datasets = [
-//   {id: "ultrametric", name: "Ultrametric", data: FileAttachment("data/ultrametric.csv").csv({typed: true})},
-//   {id: "siegel15-V4-var99", name: "Siegel15 V4 Var99", data: FileAttachment("data/siegel15-V4-var99.csv").csv({typed: true})},
-//   {id: "majajhong2015", name: "MajajHong2015", data: FileAttachment("data/majajhong2015.csv").csv({typed: true})},
-//   {id: "FreemanZiemba2013", name: "FreemanZiemba2013", data: FileAttachment("data/FreemanZiemba2013.csv").csv({typed: true})},
-// ]
-// const datasetIds = datasets.map(d => d.id);
+define({id: "795b5447", inline: true, inputs: ["tex","display"], body: async (tex,display) => {
+display(await(
+tex`X`
+))
+}});
 
+define({id: "6dc16af2", inputs: ["tex","display"], body: async (tex,display) => {
+display(await(
+tex.block`Y_{k+1}  = Y_k + \alpha \dfrac{\partial}{\partial Y} \text{score}(X, Y_k)`
+))
+}});
+
+define({id: "b0e03701", inputs: ["FileAttachment","view","Inputs"], outputs: ["pcDatasets","pcDatasetIds","pcDataset"], body: (FileAttachment,view,Inputs) => {
+const pcDatasets = new Map([
+  ["Ultrametric",       FileAttachment("data/benchmarks/ultrametric/scores_at_threshold.csv").csv({typed: true})],
+  // ["siegel15-V4-var99", FileAttachment("data/benchmarks/siegel15-V4-var99/scores_at_threshold.csv").csv({typed: true})],
+  // ["MajajHong2015",     FileAttachment("data/benchmarks/MajajHong2015/scores_at_threshold.csv").csv({typed: true})],
+  // ["FreemanZiemba2013", FileAttachment("data/benchmarks/FreemanZiemba2013/scores_at_threshold.csv").csv({typed: true})],
+  // ["Hatsopoulos2007",   FileAttachment("data/benchmarks/Hatsopoulos2007/scores_at_threshold.csv").csv({typed: true})],
+  // ["Mante2013",         FileAttachment("data/benchmarks/Mante2013/scores_at_threshold.csv").csv({typed: true})],
+])
+const pcDatasetIds = Array.from(pcDatasets.keys());
+const pcDataset = view(Inputs.select(pcDatasets, {label: "Dataset"}));
+return {pcDatasets,pcDatasetIds,pcDataset};
+}});
+
+define({id: "64e0afd3", inputs: ["pcDataset","view","Inputs"], outputs: ["pcMeasures","pcSelectedMeasures"], body: (pcDataset,view,Inputs) => {
+const pcMeasures = pcDataset.map(d => d.measure).filter((v, i, a) => a.indexOf(v) === i);
+const pcSelectedMeasures = view(Inputs.checkbox(
+  pcMeasures, {
+    label: "Measures",
+    value: ["cka", "procrustes-angular-score"],
+    sort: true
+  }
+));
+return {pcMeasures,pcSelectedMeasures};
+}});
+
+define({id: "64f35eda", inputs: ["pcDataset","pcSelectedMeasures","Plot","display","html"], outputs: ["pcFilteredScores","pcPlotScores"], body: (pcDataset,pcSelectedMeasures,Plot,display,html) => {
+const pcFilteredScores = pcDataset.filter(d => pcSelectedMeasures.includes(d.measure));
+const pcPlotScores = Plot.plot({
+  color: {legend: true},
+  x: {
+    label: "PC Explained Variance",
+    type: "log",
+    tickFormat: ",",
+    grid: true,
+    // nice: true,
+    // ticks: 10
+  },
+  y: {
+    label: "Score to Capture PC",
+    grid: true,
+    nice: true,
+    ticks: 5
+  },
+  marks: [
+    Plot.line(
+      pcFilteredScores, 
+      {
+        x: "pc_explained_variance",
+        y: "scores_at_threshold",
+        stroke: "measure",
+        tip: true,
+        strokeWidth: 4
+    })
+  ],
+  style: {
+    fontSize: "13px",
+    width: "500px",
+  }
+})
+
+if (pcFilteredScores.length === 0) {
+  display(html` `);
+} else {
+  display(pcPlotScores);
+}
+return {pcFilteredScores,pcPlotScores};
+}});
+
+define({id: "24960db5", inputs: ["FileAttachment"], outputs: ["datasets","datasetIds"], body: (FileAttachment) => {
+// it seems that FileAttachment requires the path to be give as a single string literal
 const datasets = new Map([
-  ["Ultrametric", FileAttachment("data/ultrametric.csv").csv({typed: true})],
+  ["Ultrametric", FileAttachment("data/decoding_acc_vs_scores/ultrametric.csv").csv({typed: true})],
 //  ["siegel15-V4-var99", FileAttachment("data/siegel15-V4-var99.csv").csv({typed: true})],
-  ["MajajHong2015", FileAttachment("data/MajajHong2015.csv").csv({typed: true})],
-  ["FreemanZiemba2013", FileAttachment("data/FreemanZiemba2013.csv").csv({typed: true})],
-  ["Hatsopoulos2007", FileAttachment("data/Hatsopoulos2007.csv").csv({typed: true})],
-  ["Mante2013", FileAttachment("data/Mante2013.csv").csv({typed: true})],
+  ["MajajHong2015", FileAttachment("data/decoding_acc_vs_scores/MajajHong2015.csv").csv({typed: true})],
+  ["FreemanZiemba2013", FileAttachment("data/decoding_acc_vs_scores/FreemanZiemba2013.csv").csv({typed: true})],
+  ["Hatsopoulos2007", FileAttachment("data/decoding_acc_vs_scores/Hatsopoulos2007.csv").csv({typed: true})],
+  ["Mante2013", FileAttachment("data/decoding_acc_vs_scores/Mante2013.csv").csv({typed: true})],
 ]);
 const datasetIds = Array.from(datasets.keys());
 return {datasets,datasetIds};
@@ -104,20 +181,34 @@ const selectedData = view(Inputs.select(datasets, {label: "Dataset"}))
 return {selectedData};
 }});
 
-define({id: "ec43caf8", inputs: ["selectedData","view","Inputs"], outputs: ["defaultMeasures","measures","selectedMeasures"], body: (selectedData,view,Inputs) => {
+define({id: "f23ea45e", inputs: ["selectedData","view","Inputs"], outputs: ["defaultMeasures","measures","selectedMeasures"], body: (selectedData,view,Inputs) => {
 const defaultMeasures = ["cka", "procrustes-angular-score"]
 // const measures = scores.map(d => d.measure).filter((v, i, a) => a.indexOf(v) === i);
 const measures = selectedData.map(d => d.measure).filter((v, i, a) => a.indexOf(v) === i);
-const selectedMeasures = view(Inputs.checkbox(measures, {label: "Measures", value: defaultMeasures}));
+const selectedMeasures = view(Inputs.checkbox(
+  measures, {
+    label: "Measures",
+    value: defaultMeasures,
+    sort: true
+  }
+));
 return {defaultMeasures,measures,selectedMeasures};
 }});
 
-define({id: "c9425610", inputs: ["selectedData","selectedMeasures","Plot","display"], outputs: ["filteredScores","plotScores"], body: (selectedData,selectedMeasures,Plot,display) => {
+define({id: "b449826d", inputs: ["selectedData","selectedMeasures","Plot","display","html"], outputs: ["filteredScores","plotScores"], body: (selectedData,selectedMeasures,Plot,display,html) => {
 // const scores = datasetScores.ultrametric;
 // const filteredScores = scores.filter(d => selectedMeasures.includes(d.measure));
 const filteredScores = selectedData.filter(d => selectedMeasures.includes(d.measure));
 const plotScores = Plot.plot({
   color: {legend: true},
+  x: {
+    label: "Score",
+    grid: true,
+  },
+  y: {
+    label: "Decoding Accuracy",
+    grid: true,
+  },
   marks: [
     Plot.line(
       filteredScores, 
@@ -126,14 +217,20 @@ const plotScores = Plot.plot({
         y: "decoding_accuracy",
         stroke: "measure",
         tip: true,
-        strokeWidth: 3
+        strokeWidth: 4
     })
   ],
   style: {
-    fontSize: "12px",
+    fontSize: "13px",
+    width: "500px",
   }
 })
-display(plotScores);
+
+if (filteredScores.length === 0) {
+  display(html` `);
+} else {
+  display(plotScores);
+}
 return {filteredScores,plotScores};
 }});
 
@@ -142,8 +239,50 @@ const measureCards = FileAttachment("data/cards/measures.csv").csv({typed: true}
 return {measureCards};
 }});
 
-define({id: "0e461466", inputs: ["view","Inputs","measureCards"], body: (view,Inputs,measureCards) => {
-view(Inputs.table(measureCards));
+define({id: "9383c2bb", inputs: ["view","Inputs","measureCards","htl"], outputs: ["formatBoolean"], body: (view,Inputs,measureCards,htl) => {
+view(Inputs.table(
+  measureCards, {
+    columns: [
+      "id",
+      "name",
+      "permutation",
+      "orthogonal",
+      "isotropic-scaling",
+      "invertible-linear",
+      "translation",
+      "affine"
+    ],
+    header: {
+      "permutation": "PT",
+      "orthogonal": "OT",
+      "isotropic-scaling": "IS",
+      "invertible-linear": "ILT",
+      "translation": "TR",
+      "affine": "AT"
+    },
+    format: {
+      "permutation": formatBoolean,
+      "orthogonal": formatBoolean,
+      "invertible-linear": formatBoolean,
+      "isotropic-scaling": formatBoolean,
+      "translation": formatBoolean,
+      "affine": formatBoolean
+    },
+    sort: "id",
+    layout: "auto"
+  }
+));
+
+function formatBoolean(x) {
+  if (x === "True") {
+    return htl.html`✔`;  
+    // return htl.html`✅`;
+  } else {
+    // return htl.html`✘`;
+    return "";
+  }
+}
+return {formatBoolean};
 }});
 
 define({id: "89b3e16a", inputs: ["d3"], outputs: ["width","height","color","svg"], body: (d3) => {
@@ -295,15 +434,24 @@ return {width,height,color,svg};
 
 .content p, .content h3, .content h2, .content h1 {
   max-width: none;
-  margin-top: 10px;
-  margin-bottom: 20px;
+}
+
+.content h2 {
+  margin-top: 30px;
+  margin-bottom: 10px;
+}
+
+.content h3 {
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
 
 .content p {
   text-align: justify;
+  margin: 0;
 }
 
-.content .title, .content .authors {
+.content .title, .content .authors, .content .affiliations{
   max-width: none;
   margin-right: auto;
   margin-left: auto;
@@ -311,19 +459,34 @@ return {width,height,color,svg};
 }
 
 .content .authors {
+  display: flex;
+  justify-content: center; /* Center the authors horizontally */
+  flex-wrap: wrap; /* Ensure the list wraps if space is insufficient */
+  gap: 25px; /* Space between author names */
   margin-top: 10px;
+  margin-bottom: 0;
   font-style: normal;
-  /* text color dark grey */
-  color: #666;
+  color: #444;
+  text-align: center;
 }
 
-.content .observablehq--block {
-  margin: auto;
-}
-.content #cell-c9425610 {
-  max-width: 1000px;
-  margin: auto;
+.content .affiliations {
+  display: flex;
+  justify-content: center; /* Center the authors horizontally */
+  flex-wrap: wrap; /* Ensure the list wraps if space is insufficient */
+  gap: 25px; /* Space between names */
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: #888;
   text-align: center;
+  font-size: smaller;
+}
+
+
+.content .observablehq--block {
+  /* TODO?: margin: auto; */
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .content .github-link {
@@ -353,50 +516,96 @@ return {width,height,color,svg};
   margin-right: 8px;
 }
 
-.content hr {
-  border: 0;
-  height: 1px;
-  background-color: #ccc; /* Or any color you prefer */
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
+
 </style>
 <div class="content">
 <h1 class="title">Differentiable Optimization of Similarity Scores Between Models and Brains</h1>
-<h2 class="authors">Nathan Cloos, Markus Siegel, Scott L. Brincat, Earl K. Miller, Guangyu Robert Yang, Christopher J. Cueva</h2>
+<!-- <h2 class="authors">Nathan Cloos, Markus Siegel, Scott L. Brincat, Earl K. Miller, Guangyu Robert Yang, Christopher J. Cueva</h2> -->
+<div class="authors">
+  <span>Nathan Cloos<sup>1</sup></span>
+  <span>Markus Siegel<sup>2</sup></span>
+  <span>Scott L. Brincat<sup>1</sup></span>
+  <span>Earl K. Miller<sup>1</sup></span>
+  <span>Guangyu Robert Yang<sup>1</sup></span>
+  <span>Christopher J. Cueva<sup>1</sup></span>
+</div>
+<div class="affiliations">
+  <p><sup>1</sup>MIT BCS</p>
+  <p><sup>2</sup>HIH Tübingen</p>
+</div>
 <div class="github-link">
   <a href="https://github.com/nacloos/diffscore" target="_blank">
     <img src="https://icons.iconarchive.com/icons/papirus-team/papirus-apps/256/github-icon.png" alt="GitHub" width="20">
     Code
   </a>
 </div>
-<ul>
-<li><a href="#high-scores-failing-to-encoding-task-variables">High scores failing to encoding task variables?</a></li>
-<li><a href="#abstract">Abstract</a></li>
-<li><a href="#similarity-repository">Similarity Repository</a></li>
+<h2 id="content" tabindex="-1"><a class="observablehq-header-anchor" href="#content">Content</a></h2>
+<ul style="margin: 0;">
+  <li><a href="#optimization-of-similarity-scores">Optimization of Similarity Scores</a></li>
+  <li><a href="#scores-to-capture-principal-components">Scores to Capture Principal Components</a></li>
+  <li><a href="#high-scores-failing-to-encode-task-variables">High Scores Failing to Encode Task Variables</a></li>
+  <li><a href="#metric-cards">Metric Cards</a></li>
 </ul>
-<h2 id="high-scores-failing-to-encoding-task-variables%3F" tabindex="-1"><a class="observablehq-header-anchor" href="#high-scores-failing-to-encoding-task-variables%3F">High scores failing to encoding task variables?</a></h2>
-<hr>
-<div id="cell-774ff5f6" class="observablehq observablehq--block"></div>
-<div id="cell-9186eecf" class="observablehq observablehq--block"></div>
-<div id="cell-ec43caf8" class="observablehq observablehq--block"></div>
-<div id="cell-c9425610" class="observablehq observablehq--block"></div>
 <h2 id="abstract" tabindex="-1"><a class="observablehq-header-anchor" href="#abstract">Abstract</a></h2>
 <p>
 What metrics should guide the development of more realistic models of the brain? One proposal is to quantify the similarity between models and brains using methods such as linear regression, Centered Kernel Alignment (CKA), and Procrustes distance. To better understand the limitations of these similarity measures we analyze neural activity recorded in two experiments on nonhuman primates, and optimize synthetic datasets to become more similar to these neural recordings. How similar can these synthetic datasets be to neural activity while failing to encode task relevant variables? We find that some measures like linear regression and CKA, differ from Procrustes distance, and yield high similarity scores even when task relevant variables cannot be linearly decoded from the synthetic datasets. Synthetic datasets optimized to maximize similarity scores initially learn the first principal component of the target dataset, but Procrustes distance captures higher variance dimensions much earlier than methods like linear regression and CKA.</p>
-<!-- TODO: create one large gif so that they are sync? -->
-<div style="">
-  <img src="./_file/data/animations/cka.3ecf8281.gif" width="200">
-  <img src="./_file/data/animations/ridge.a8b34a74.gif" width="200">
-  <img src="./_file/data/animations/procrustes-angular-score.f803b5b3.gif" width="200">
+<h2 id="optimization-of-similarity-scores" tabindex="-1"><a class="observablehq-header-anchor" href="#optimization-of-similarity-scores">Optimization of Similarity Scores</a></h2>
+<p>Optimize randomly initialized dataset <span id="cell-9919e91a" class="observablehq--loading"></span> (e.g. model dataset) to maximize similarity score with a reference dataset <span id="cell-795b5447" class="observablehq--loading"></span> (e.g. brain dataset).</p>
+<div id="cell-6dc16af2" class="observablehq observablehq--block observablehq--loading"></div>
+<div style="display: flex; justify-content: space-around; align-items: center; margin: auto;">
+  <div style="text-align: center; width: 200px;">
+    <p style="text-align: center">Reference</p>
+    <img src="./_file/data/animations/reference.b03048ff.gif" width="150">
+  </div>
+  <div style="text-align: center; width: 250px;">
+    <p style="text-align: center">Ridge Regression</p>
+    <img src="./_file/data/animations/ridge.a8b34a74.gif" width="150">
+  </div>
+  <div style="text-align: center; width: 250px;">
+    <p style="text-align: center">CKA</p>
+    <img src="./_file/data/animations/cka.3ecf8281.gif" width="150">
+  </div>
+  <div style="text-align: center; width: 200px;">
+    <p style="text-align: center">Procrustes Angular Score</p>
+    <img src="./_file/data/animations/procrustes-angular-score.f803b5b3.gif" width="150">
+  </div>
 </div>
-<h2 id="similarity-repository" tabindex="-1"><a class="observablehq-header-anchor" href="#similarity-repository">Similarity Repository</a></h2>
+<h2 id="scores-to-capture-principal-components" tabindex="-1"><a class="observablehq-header-anchor" href="#scores-to-capture-principal-components">Scores to Capture Principal Components</a></h2>
+<div style="margin-bottom: 10px"></div>
+<div id="cell-b0e03701" class="observablehq observablehq--block"></div>
+<div id="cell-64e0afd3" class="observablehq observablehq--block"></div>
+<div id="cell-64f35eda" class="observablehq observablehq--block"></div>
+<h2 id="high-scores-failing-to-encode-task-variables" tabindex="-1"><a class="observablehq-header-anchor" href="#high-scores-failing-to-encode-task-variables">High Scores Failing to Encode Task Variables</a></h2>
+<p>Optimizing for similarity scores reveals model datasets with high scores that fail to encode all the relevant task variables.
+Select a dataset and a set of metrics to compare.</p>
+<div style="margin-bottom: 20px"></div>
+<div id="cell-24960db5" class="observablehq observablehq--block"></div>
+<div id="cell-9186eecf" class="observablehq observablehq--block"></div>
+<!-- TODO? paper link -->
+<!-- https://www.biorxiv.org/content/10.1101/2021.07.14.452926v1.full.pdf -->
+<!-- <a style="margin: 0; font-size: 12px" href="https://www.biorxiv.org/content/10.1101/2021.07.14.452926v1.full.pdf" target="_blank">Link to paper</a> -->
+<div id="cell-f23ea45e" class="observablehq observablehq--block"></div>
+<div id="cell-b449826d" class="observablehq observablehq--block"></div>
+<h2 id="metric-cards" tabindex="-1"><a class="observablehq-header-anchor" href="#metric-cards">Metric Cards</a></h2>
+<h3 id="invariances-properties" tabindex="-1"><a class="observablehq-header-anchor" href="#invariances-properties">Invariances Properties</a></h3>
 <div id="cell-ad3cafab" class="observablehq observablehq--block"></div>
-<div id="cell-0e461466" class="observablehq observablehq--block"></div>
+<div id="cell-9383c2bb" class="observablehq observablehq--block"></div>
+<div style="margin-top: 10px">
+Invariance classes:
+<ul style="font-size: 14px; list-style-type: none; margin: 0;">
+  <li><b>PT</b>: Permutation Transformation</li>
+  <li><b>OT</b>: Orthogonal Transformation</li>
+  <li><b>ILT</b>: Invertible Linear Transformation</li>
+  <li><b>IS</b>: Isotropic Scaling</li>
+  <li><b>TR</b>: Translation</li>
+  <li><b>AT</b>: Affine Transformation</li>
+<ul>
+</ul></ul></div>
+<p>TODO: relationships between measures?</p>
 <div id="cell-89b3e16a" class="observablehq observablehq--block"></div>
 </div>
 </main>
 <footer id="observablehq-footer">
-<div>Built with <a href="https://observablehq.com/" target="_blank">Observable</a> on <a title="2024-03-20T11:32:19">Mar 20, 2024</a>.</div>
+<div>Built with <a href="https://observablehq.com/" target="_blank">Observable</a> on <a title="2024-03-21T17:17:32">Mar 21, 2024</a>.</div>
 </footer>
 </div>
