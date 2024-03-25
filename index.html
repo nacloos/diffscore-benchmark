@@ -6,11 +6,9 @@
 <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;display=swap" crossorigin>
 <link rel="preload" as="style" href="./_observablehq/theme-air,near-midnight,wide.css">
 <link rel="preload" as="style" href="./_observablehq/stdlib/inputs.css">
-<link rel="preload" as="style" href="./_npm/katex@0.16.9/dist/katex.min.css">
 <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Source+Serif+Pro:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&amp;display=swap" crossorigin>
 <link rel="stylesheet" type="text/css" href="./_observablehq/theme-air,near-midnight,wide.css">
 <link rel="stylesheet" type="text/css" href="./_observablehq/stdlib/inputs.css">
-<link rel="stylesheet" type="text/css" href="./_npm/katex@0.16.9/dist/katex.min.css">
 <link rel="modulepreload" href="./_observablehq/client.js">
 <link rel="modulepreload" href="./_observablehq/runtime.js">
 <link rel="modulepreload" href="./_observablehq/stdlib.js">
@@ -19,9 +17,7 @@
 <link rel="modulepreload" href="./_npm/htl@0.3.1/+esm.js">
 <link rel="modulepreload" href="./_observablehq/stdlib/inputs.js">
 <link rel="modulepreload" href="./_npm/@observablehq/plot@0.6.14/+esm.js">
-<link rel="modulepreload" href="./_observablehq/stdlib/tex.js">
 <link rel="modulepreload" href="./_npm/isoformat@0.2.1/+esm.js">
-<link rel="modulepreload" href="./_npm/katex@0.16.9/+esm.js">
 <link rel="modulepreload" href="./_npm/d3-array@3.2.4/+esm.js">
 <link rel="modulepreload" href="./_npm/d3-axis@3.0.0/+esm.js">
 <link rel="modulepreload" href="./_npm/d3-brush@3.0.0/+esm.js">
@@ -73,24 +69,6 @@ define({id: "40f21020", outputs: ["d3"], body: async () => {
 const d3 = await import("./_npm/d3@7.9.0/+esm.js");
 
 return {d3};
-}});
-
-define({id: "9919e91a", inline: true, inputs: ["tex","display"], body: async (tex,display) => {
-display(await(
-tex`Y`
-))
-}});
-
-define({id: "795b5447", inline: true, inputs: ["tex","display"], body: async (tex,display) => {
-display(await(
-tex`X`
-))
-}});
-
-define({id: "6dc16af2", inputs: ["tex","display"], body: async (tex,display) => {
-display(await(
-tex.block`Y_{k+1}  = Y_k + \alpha \dfrac{\partial}{\partial Y} \text{score}(X, Y_k)`
-))
 }});
 
 define({id: "b0e03701", inputs: ["FileAttachment","view","Inputs"], outputs: ["pcDatasets","pcDatasetIds","pcDataset"], body: (FileAttachment,view,Inputs) => {
@@ -550,8 +528,13 @@ return {width,height,color,svg};
 <p>
 What metrics should guide the development of more realistic models of the brain? One proposal is to quantify the similarity between models and brains using methods such as linear regression, Centered Kernel Alignment (CKA), and Procrustes distance. To better understand the limitations of these similarity measures we analyze neural activity recorded in two experiments on nonhuman primates, and optimize synthetic datasets to become more similar to these neural recordings. How similar can these synthetic datasets be to neural activity while failing to encode task relevant variables? We find that some measures like linear regression and CKA, differ from Procrustes distance, and yield high similarity scores even when task relevant variables cannot be linearly decoded from the synthetic datasets. Synthetic datasets optimized to maximize similarity scores initially learn the first principal component of the target dataset, but Procrustes distance captures higher variance dimensions much earlier than methods like linear regression and CKA.</p>
 <h2 id="optimization-of-similarity-scores" tabindex="-1"><a class="observablehq-header-anchor" href="#optimization-of-similarity-scores">Optimization of Similarity Scores</a></h2>
-<p>Optimize randomly initialized dataset <span id="cell-9919e91a" class="observablehq--loading"></span> (e.g. model dataset) to maximize similarity score with a reference dataset <span id="cell-795b5447" class="observablehq--loading"></span> (e.g. brain dataset).</p>
-<div id="cell-6dc16af2" class="observablehq observablehq--block observablehq--loading"></div>
+<p>Optimize randomly initialized dataset Y (e.g. model dataset) to maximize similarity score with a reference dataset X (e.g. brain dataset).</p>
+<img style="margin: auto; margin-bottom: 2em;" src="./_file/score_grad_ascent.ec24578c.png" width="250">
+<!-- 
+TODO: error loading tex.js when deployed
+```tex
+Y_{k+1}  = Y_k + \alpha \dfrac{\partial}{\partial Y} \text{score}(X, Y_k)
+``` -->
 <div style="display: flex; justify-content: space-around; align-items: center; margin: auto;">
   <div style="text-align: center; width: 200px;">
     <p style="text-align: center">Reference</p>
@@ -601,11 +584,11 @@ Invariance classes:
   <li><b>AT</b>: Affine Transformation</li>
 <ul>
 </ul></ul></div>
-<p>TODO: relationships between measures?</p>
+<!-- TODO: relationships between measures? -->
 <div id="cell-89b3e16a" class="observablehq observablehq--block"></div>
 </div>
 </main>
 <footer id="observablehq-footer">
-<div>Built with <a href="https://observablehq.com/" target="_blank">Observable</a> on <a title="2024-03-21T17:17:32">Mar 21, 2024</a>.</div>
+<div>Built with <a href="https://observablehq.com/" target="_blank">Observable</a> on <a title="2024-03-25T14:31:45">Mar 25, 2024</a>.</div>
 </footer>
 </div>
